@@ -6,4 +6,5 @@ import lombok.Data;
 public class CartCommand {
 	String goodsNum;
 	Integer qty;
+	Integer price;
 }
