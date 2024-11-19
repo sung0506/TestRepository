@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inquireMapperSql">
+<insert id="inquireInsert" parameterType="inquire">
+insert into inquire(INQUIRE_NUM, MEMBER_NUM, GOODS_NUM,INQUIRE_SUBJECT,INQUIRE_KIND
+					, INQUIRE_CONTENTS, INQUIRE_DATE )
+VALUES((select coalesce(max(inquire_num),0) + 1 from inquire)
+	   ,#{memberNum},#{goodsNum},#{inquireSubject},#{inquireKind}
+	   ,#{inquireContents},sysdate)
+</insert>
+<select id="inquireList" parameterType="hashmap" resultType="inquire">
+select inquire_num, i.member_num, i.goods_num, inquire_subject, inquire_contents ,inquire_kind, 
+      inquire_date, inquire_answer, inquire_answer_date ,i.emp_num 
+      ,member_id 
+      ,goods_name 
+from inquire i left outer join members m 
+on i.member_num = m.member_num join goods g 
+on i.goods_num = g.goods_num 
+<trim prefix="where" prefixOverrides="AND | OR">
+	<if test="goodsNum != null">
+		 i.goods_num = #{goodsNum}
+	</if>
+	<if test="inquireNum  != null">
+		and inquire_num = #{inquireNum}
+	</if>
+</trim> 
+</select>
+<delete id="inquireDelete" parameterType="integer">
+	delete from inquire
+	where  INQUIRE_NUM = #{inquireNum}
+</delete>
+<update id="inquireUpdate" parameterType="inquire">
+update inquire
+set INQUIRE_SUBJECT = #{inquireSubject}
+   ,INQUIRE_CONTENTS = #{inquireContents}
+   ,INQUIRE_KIND = #{inquireKind}
+where  INQUIRE_NUM = #{inquireNum}
+</update>
+<update id="inquireAnswerUpdate" parameterType="inquire">
+update inquire
+set EMP_NUM = #{empNum}, <!-- 답변한 직원 -->
+	INQUIRE_ANSWER = #{inquireAnswer}, <!-- 답변내용 -->
+	inquire_answer_date = sysdate <!-- 답변시간 -->
+where INQUIRE_NUM = #{inquireNum}
+</update>
+</mapper>

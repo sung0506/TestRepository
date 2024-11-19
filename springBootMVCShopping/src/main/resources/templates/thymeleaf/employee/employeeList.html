@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src = "https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script type = "text/javascript" src = "/static/js/checkbox.js"></script>
+</head>
+<body>
+<a href = "employeeWrite">직원 등록</a><br />
+직원 수 :
+<table border = "1" width = "600" align = "center">
+	<form action="employeeList" method="get">
+	<tr>
+		<td colspan ="6">직원 검색 : 
+			<input type = "search" name = "searchWord" size=60 th:value = "${searchWord}">
+			<input type ="submit" value = "검색">
+			
+		</td>
+	</tr>
+	</form>
+<form action = "employeesDelete" method="post" id="frm">
+	<tr><td><input type="checkbox" id="checkBoxs" /></td>
+		<td>번호</td><td>이름</td><td>아이디</td><td>교용일</td>
+		<td><button type="submit" >선택 삭제</button></td>
+	</tr>
+	<tr th:each = " dto : ${list}">
+		<td><input type="checkbox" name="nums" th:value="${dto.empNum}" /></td>
+		<td><a th:href = "|employeeDetail?empNum=${dto.empNum}|">[[${dto.empNum}]]</a></td>
+		<td><a th:href = "|employeeDetail?empNum=${dto.empNum}|">[[${dto.empName}]]</a></td>
+		<td>[[${dto.empId}]]</td>
+		<td>[[${#dates.format(dto.empHireDate, 'yyyy-MM-dd')}]]</td>
+		<td><button type ="button" th:attr="onclick=|javascript:location.href='employeesDelete?nums=${dto.empNum}'|">삭제</button></td>
+	</tr>
+</form>
+	<tr>
+		<th colspan="6">
+			<span th:if="${page <= 1}">[이전]</span>
+			<span th:if="${page > 1}">
+				<a th:href="|employeeList?page=${page - 1}&searchWord=${searchWord}|">[이전]</a>
+			</span>
+			<th:block th:each= " i : ${#numbers.sequence(startPageNum, endPageNum)}">
+				[<a th:href = "|employeeList?page=${i}&searchWord=${searchWord}|">[[${i}]]</a>]
+			</th:block>
+			<span th:if="${page < maxPage}">
+				<a th:href="@{employeeList(page=${page + 1},searchWord=${searchWord})}">[다음]</a>
+			</span>
+			<span th:if = "${page >= maxPage}">
+				[다음]
+			</span>
+		</th>
+	</tr>
+</table>
+</body>
+</html>

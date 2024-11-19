@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springBootMVCShopping.mapper.MemberMapper">
+<insert id="memberInsert" parameterType="MemberDTO">
+	insert into members(member_num, member_name, member_id, member_pw, member_addr, member_addr_detail
+	, member_post, member_regist, gender, member_phone1
+	<if test ="memberPhone2 != null">
+	,member_phone2
+	</if>
+	, member_email, member_birth
+	, member_point)
+	values(#{memberNum}, #{memberName}, #{memberId}, #{memberPw}, #{memberAddr}, #{memberAddrDetail}, #{memberPost}
+		, sysdate, #{gender}, #{memberPhone1}
+		<if test = "memberPhone2 != null">
+		, #{memberPhone2}
+		</if>
+		, #{memberEmail}, #{memberBirth}, 0)
+</insert>
+
+<sql id ="memberBaseColumns">
+	member_num, member_name, member_id, member_pw, member_addr, member_addr_detail
+	, member_post, member_regist, gender, member_phone1, member_phone2, member_email
+	, member_birth, member_point, member_email_conf
+</sql>
+
+<select id="memberSelectList" resultType="memberDTO" parameterType="startEndPageDTO">
+select *
+from(select row_number() over (order by member_num) as rn 
+		,<include refid = "memberBaseColumns"/>
+	from members
+<where>
+	<if test="searchWord != null">
+		(member_name like '%' || #{searchWord} || '%'
+        or member_id like '%' || #{searchWord} || '%'
+        or member_num like '%' || #{searchWord} || '%')
+	</if>
+</where>
+)
+where rn between #{startRow} and #{endRow}
+</select>
+
+<select id="memberCount" resultType="integer">
+	select count(*) from members
+</select>
+
+<delete id="numsDelete">
+	delete from ${tableName}
+	where  ${columnName} in 
+	 <foreach collection="nums" item="num" open="(" close =")" index="index" separator=",">
+	 	#{num}
+	 </foreach>
+</delete>
+
+<select id="memberSelectOne" parameterType="String" resultType="memberDTO">
+	select <include refid="memberBaseColumns" />
+	from members
+	where member_num = #{memberNum}
+</select>
+
+<select id="memberSelectOne1">
+	select <include refid="memberBaseColumns" />
+	from members
+	where member_id = #{memberId}
+</select>
+
+<update id="memberUpdate" parameterType="memberDTO">
+	update members
+	<trim prefix="set" suffixOverrides=",">
+		member_name = #{memberName},
+		member_ADDR = #{memberAddr},
+		<if test="memberAddrDetail != null">
+		member_Addr_Detail = #{memberAddrDetail},
+		</if>
+		<if test="memberAddrDetail == null">
+		member_Addr_Detail = null,
+		</if>
+		member_Post = #{memberPost},
+		gender = #{gender},
+		member_Phone1 = #{memberPhone1},
+		member_Email = #{memberEmail},
+		member_Birth = #{memberBirth},
+		<choose>
+			<when test="memberPhone2 != null">
+			member_Phone2 = #{memberPhone2},
+			</when>
+			<when test="memberPhone2 == null">
+			member_Phone2 = null,
+			</when>
+		</choose>
+	</trim>
+where MEMBER_NUM = #{memberNum}
+</update>
+
+<delete id="memberDelete" parameterType="String">
+delete from members
+where member_num = #{memberNum}
+</delete>
+
+<update id="memberEmailCheckUpdate" parameterType="string">
+update members
+set member_email_conf = 'Y'
+where member_email = #{memberEmail} and member_email_conf is null
+</update>
+
+<select id="memberNumSelect" parameterType="string" resultType="string">
+	select member_num from members where member_id = #{memberId}
+</select>
+</mapper>
+

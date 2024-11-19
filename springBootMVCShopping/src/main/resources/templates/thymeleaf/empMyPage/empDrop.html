@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<ul>
+		<li><a href="<c:url value='/' />">홈</a></li>
+		<li><a href="empMyPage">내정보 보기</a></li>
+		<li><a href="empUpdate">내정보 수정</a></li>
+		<li><a href = "empPwModify">비밀번호변경</a></li>
+		<li><a href = "empDrop">회원탈퇴</a></li>
+	</ul>
+<form action="empDropOk" method = "post">
+비밀번호 : <input type = "password" id = "empPw" name = "empPw" />
+		<input type = "submit" value = "회원탈퇴" />
+</form>
+</body>
+</html>

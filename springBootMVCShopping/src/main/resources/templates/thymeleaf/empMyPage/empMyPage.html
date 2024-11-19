@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<ul>
+		<li><a href="<c:url value='/' />">홈</a></li>
+		<li><a href="empMyPage">내정보 보기</a></li>
+		<li><a href="empUpdate">내정보 수정</a></li>
+		<li><a href = "empPwModify">비밀번호변경</a></li>
+		<li><a href = "empDrop">회원탈퇴</a></li>
+	</ul>
+이름 : [[${employeeCommand.empName }]]<br />
+아이디 : [[${employeeCommand.empId }]]<br />
+주소 : [[${employeeCommand.empAddr }]]<br />
+상세주소 : [[${employeeCommand.empAddrDetail }]]<br />
+우편번호 : [[${employeeCommand.empPost }]]<br />
+연락처 : [[${employeeCommand.empPhone }]]<br />
+주민등록번호 : [[${employeeCommand.empJumin }]]<br />
+입사일 : [[${#dates.format(employeeCommand.empHireDate, 'yyyy-MM-dd')}]]<br />
+이메일 : [[${employeeCommand.empEmail }]]<br />
+</body>
+</html>

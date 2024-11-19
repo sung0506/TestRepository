@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springBootMVCShopping.mapper.EmployeeInfoMapper">
+
+<select id="employeeSelectOne" parameterType="String" resultType="employeeDTO">
+select emp_num as empNum, emp_id as empId, emp_pw as empPw, emp_name as empName, emp_addr as empAddr
+,emp_addr_detail as empAddrDetail, emp_post as empPost, emp_phone as empPhone
+,emp_jumin as empJumin, emp_email as empEmail, emp_hire_date as empHireDate, emp_image as empImage
+from employees
+where emp_id = #{empId}
+</select>
+
+<update id="employeeUpdate" parameterType="employeeDTO">
+update employees
+set emp_addr = #{empAddr}
+    ,emp_addr_detail = #{empAddrDetail}
+    ,emp_email = #{empEmail}
+    ,emp_phone = #{empPhone}
+    ,emp_post = #{empPost}
+where emp_num = #{empNum}
+</update>
+
+<update id="employeePwUpdate">
+update employees
+set emp_pw = #{newPw}
+where emp_id = #{empId}
+</update>
+
+<delete id="employeeDelte" parameterType="String">
+delete employees
+where emp_id = #{empId}
+</delete>
+</mapper>

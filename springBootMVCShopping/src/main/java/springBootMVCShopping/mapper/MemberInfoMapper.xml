@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springBootMVCShopping.mapper.MemberInfoMapper">
+<select id="memberSelectOne" parameterType="string" resultType="memberDTO">
+	select member_num as memberNum, member_name as memberName, member_id as memberId, member_pw as memberPw
+		  ,member_addr as memberAddr, member_addr_detail as memberAddrDetail, member_post as memberPost
+		  ,member_regist as memberRegist, gender, member_phone1 as memberPhone1, member_phone2 as memberPhone2
+		  ,member_email as memberEmail, member_birth as memberBirth
+	from members
+	where member_id = #{memberId}
+</select>
+
+<update id="memberUpdate" parameterType="memberDTO">
+update members
+set member_name = #{memberName}
+	,member_addr = #{memberAddr}
+	,member_addr_detail = #{memberAddrDetail}
+	,member_post = #{memberPost}
+	,gender = #{gender}
+	,member_phone1 = #{memberPhone1}
+	,member_phone2 = #{memberPhone2}
+	,member_email = #{memberEmail}
+	,member_birth = #{memberBirth}
+where member_id = #{memberId}
+</update>
+
+<update id="memberPwUpdate">
+update members 
+set member_pw = #{newPw}
+where member_id = #{memberId}
+</update>
+
+<delete id="memberDelete" parameterType="string">
+delete from members
+where member_id = #{memberId}
+</delete>
+</mapper>

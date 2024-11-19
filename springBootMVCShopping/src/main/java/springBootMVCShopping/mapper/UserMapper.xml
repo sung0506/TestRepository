@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springBootMVCShopping.mapper.UserMapper">
+<sql id="memberNum">
+select concat('mem_', COALESCE(substr(max(member_num), 5),100000) + 1) from members
+</sql>
+
+<insert id="userInsert" parameterType="memberDTO">
+insert into members(member_num, member_name, member_id, member_pw, member_addr
+					,member_addr_detail, member_post, member_regist, gender
+					,member_phone1, member_phone2, member_email, member_birth
+					,member_point, member_email_conf)
+values ( (<include refid="memberNum" />)
+		,#{memberName}, #{memberId}, #{memberPw}, #{memberAddr}
+		,#{memberAddrDetail}, #{memberPost}, sysdate, #{gender}, #{memberPhone1}
+		,#{memberPhone2}, #{memberEmail}, #{memberBirth}, 0, null)
+</insert>
+</mapper>
